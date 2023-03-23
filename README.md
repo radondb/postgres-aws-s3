@@ -79,7 +79,9 @@ aws_s3.table_import_from_s3 (
    options text, 
    s3_info aws_commons._s3_uri_1,
    credentials aws_commons._aws_credentials_1,
-   endpoint_url text default null
+   endpoint_url text default null,
+   read_timeout integer default 60,
+   tempfile_dir text default '/var/lib/postgresql/data/'
 )
 ```
 
@@ -93,6 +95,8 @@ options | options passed to the COPY command in Postgres
 s3_info | An aws_commons._s3_uri_1 composite type containing the bucket, file path and region information about the s3 object
 credentials | An aws_commons._aws_credentials_1 composite type containing the access key, secret key, session token credentials. To omit a value, set it `null`.
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
+read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+tempfile_dir | Specify temporary file location
 
 ##### Example
 ```postgresql
@@ -169,7 +173,9 @@ aws_s3.table_import_from_s3 (
    access_key text,
    secret_key text,
    session_token text,
-   endpoint_url text default null
+   endpoint_url text default null,
+   read_timeout integer default 60,
+   tempfile_dir text default '/var/lib/postgresql/data/'
 ) 
 ```
 
@@ -185,6 +191,8 @@ access_key | aws access key id
 secret_key | aws secret key
 session_token | optional session token
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
+read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+tempfile_dir | Specify temporary file location
 
 ##### Example
 ```postgresql
@@ -274,7 +282,10 @@ aws_s3.query_export_to_s3(
     s3_info aws_commons._s3_uri_1,
     credentials aws_commons._aws_credentials_1 default null,
     options text default null, 
-    endpoint_url text default null
+    endpoint_url text default null,
+    read_timeout integer default 60,
+    override boolean default false,
+    tempfile_dir text default '/var/lib/postgresql/data/',
 )
 ```
 
@@ -287,6 +298,9 @@ s3_info | An aws_commons._s3_uri_1 composite type containing the bucket, file pa
 credentials | An aws_commons._aws_credentials_1 composite type containing the access key, secret key, session token credentials. To omit a value, set it `null`.
 options | options passed to the COPY command in Postgres
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
+read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+override | Whether the export overwrites the file, if not, a suffix of _part{n} will be generated
+tempfile_dir | Specify temporary file location
 
 ##### Example
 ```postgresql
@@ -327,7 +341,10 @@ aws_s3.query_export_to_s3(
     secret_key text default null,
     session_token text default null,
     options text default null, 
-    endpoint_url text default null   
+    endpoint_url text default null,
+    read_timeout integer default 60,
+    override boolean default false,
+    tempfile_dir text default '/var/lib/postgresql/data/',
 )
 ```
 
@@ -342,6 +359,9 @@ secret_key | aws secret key
 session_token | optional session token
 options | options passed to the COPY command in Postgres
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
+read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+override | Whether the export overwrites the file, if not, a suffix of _part{n} will be generated
+tempfile_dir | Specify temporary file location
 
 ##### Example
 ```postgresql
@@ -465,4 +485,5 @@ psql> SELECT * FROM new_animals;
 ## Thanks
 
 * Thomas Gordon Lowrey IV [@gordol](https://github.com/gordol)
+
 
