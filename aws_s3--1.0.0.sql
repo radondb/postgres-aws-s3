@@ -243,10 +243,13 @@ AS $$
         file_path_parts = re.match(r'^(.*?)(\.[^.]*$|$)', upload_file_path)
         base_name = file_path_parts.group(1)
         extension = file_path_parts.group(2)
-        counter = 0
-        while file_exists(bucket, get_unique_file_path(base_name, counter, extension), s3):
-            counter += 1
-        upload_file_path = get_unique_file_path(base_name, counter, extension)
+        if not file_exists(bucket, file_path, s3):
+            upload_file_path = file_path
+        else:
+            counter = 1
+            while file_exists(bucket, get_unique_file_path(base_name, counter, extension), s3):
+                counter += 1
+            upload_file_path = get_unique_file_path(base_name, counter, extension)
 
     with tempfile.NamedTemporaryFile(dir=tempfile_dir) as fd:
         plan = plpy.prepare(
