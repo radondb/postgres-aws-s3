@@ -81,6 +81,7 @@ aws_s3.table_import_from_s3 (
    credentials aws_commons._aws_credentials_1,
    endpoint_url text default null,
    read_timeout integer default 60,
+   override boolean default false,
    tempfile_dir text default '/var/lib/postgresql/data/'
 )
 ```
@@ -96,6 +97,7 @@ s3_info | An aws_commons._s3_uri_1 composite type containing the bucket, file pa
 credentials | An aws_commons._aws_credentials_1 composite type containing the access key, secret key, session token credentials. To omit a value, set it `null`.
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
 read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+override | Whether to overwrite data. If true, will truncate table.
 tempfile_dir | Specify temporary file location
 
 ##### Example
@@ -175,6 +177,7 @@ aws_s3.table_import_from_s3 (
    session_token text,
    endpoint_url text default null,
    read_timeout integer default 60,
+   override boolean default false,
    tempfile_dir text default '/var/lib/postgresql/data/'
 ) 
 ```
@@ -192,6 +195,7 @@ secret_key | aws secret key
 session_token | optional session token
 endpoint_url | optional endpoint to use (e.g., `http://localhost:4566`)
 read_timeout | The time in seconds till a timeout exception is thrown when attempting to read from a connection.The default is 60 seconds.
+override | Whether to overwrite data. If true, will truncate table.
 tempfile_dir | Specify temporary file location
 
 ##### Example
