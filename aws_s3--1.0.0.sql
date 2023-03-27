@@ -50,6 +50,7 @@ CREATE OR REPLACE FUNCTION aws_s3.table_import_from_s3 (
    session_token text default null,
    endpoint_url text default null,
    read_timeout integer default 60,
+   override boolean default false,
    tempfile_dir text default '/var/lib/postgresql/data/'
 ) RETURNS int
 LANGUAGE plpython3u
@@ -90,6 +91,9 @@ AS $$
         config=boto3.session.Config(read_timeout=read_timeout),
         **aws_settings
     )
+
+    if override:
+        plpy.execute("TRUNCATE TABLE {table_name} RESTRICT;".format(table_name=table_name))
 
     formatted_column_list = "({column_list})".format(column_list=column_list) if column_list else ''
     num_rows = 0
@@ -146,14 +150,15 @@ CREATE OR REPLACE FUNCTION aws_s3.table_import_from_s3(
    credentials aws_commons._aws_credentials_1,
    endpoint_url text default null,
    read_timeout integer default 60,
+   override boolean default false,
    tempfile_dir text default '/var/lib/postgresql/data/'
 ) RETURNS INT
 LANGUAGE plpython3u
 AS $$
 
     plan = plpy.prepare(
-        'SELECT aws_s3.table_import_from_s3($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) AS num_rows',
-        ['TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INTEGER', 'TEXT']
+        'SELECT aws_s3.table_import_from_s3($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13) AS num_rows',
+        ['TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'TEXT', 'INTEGER', 'BOOLEAN', 'TEXT']
     )
     return plan.execute(
         [
@@ -167,7 +172,9 @@ AS $$
             credentials['secret_key'],
             credentials['session_token'],
             endpoint_url,
-            read_timeout
+            read_timeout,
+            override,
+            tempfile_dir
         ]
     )[0]['num_rows']
 $$;
@@ -306,7 +313,9 @@ AS $$
             credentials.get('session_token') if credentials else None,
             options,
             endpoint_url,
-            read_timeout
+            read_timeout,
+            override,
+            tempfile_dir
         ]
     )
 $$;
