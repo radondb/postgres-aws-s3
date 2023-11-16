@@ -236,7 +236,7 @@ psql> SET aws_s3.endpoint_url TO 'http://localstack:4566';
 You can also set the AWS credentials:
 ```
 psql> SET aws_s3.access_key_id TO 'dummy';
-psql> SET aws_s3.secret_key TO 'dummy';
+psql> SET aws_s3.secret_access_key TO 'dummy';
 psql> SET aws_s3.session_token TO 'dummy';
 ```
 and then omit them from the function calls.
@@ -325,8 +325,8 @@ psql> SELECT * FROM aws_s3.query_export_to_s3(
 ```
 If you set the AWS credentials:
 ```
-psql> SET aws_s3.aws_s3.access_key_id TO 'dummy';
-psql> SET aws_s3.aws_s3.secret_key TO 'dummy';
+psql> SET aws_s3.access_key_id TO 'dummy';
+psql> SET aws_s3.secret_access_key TO 'dummy';
 psql> SET aws_s3.session_token TO 'dummy';
 ```
 
@@ -387,8 +387,8 @@ psql> SELECT * FROM aws_s3.query_export_to_s3(
 
 If you set the AWS credentials:
 ```
-psql> SET aws_s3.aws_s3.access_key_id TO 'dummy';
-psql> SET aws_s3.aws_s3.secret_key TO 'dummy';
+psql> SET aws_s3.access_key_id TO 'dummy';
+psql> SET aws_s3.secret_access_key TO 'dummy';
 psql> SET aws_s3.session_token TO 'dummy';
 ```
 
