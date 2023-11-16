@@ -325,8 +325,8 @@ psql> SELECT * FROM aws_s3.query_export_to_s3(
 ```
 If you set the AWS credentials:
 ```
-psql> SET aws_s3.aws_s3.access_key_id TO 'dummy';
-psql> SET aws_s3.aws_s3.secret_access_key TO 'dummy';
+psql> SET aws_s3.access_key_id TO 'dummy';
+psql> SET aws_s3.secret_access_key TO 'dummy';
 psql> SET aws_s3.session_token TO 'dummy';
 ```
 
